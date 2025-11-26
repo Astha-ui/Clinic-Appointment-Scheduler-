@@ -1,3 +1,35 @@
+<?php
+session_start(); // start the session
+
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'clinic_db');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = $_POST['password'];
+
+    $result = $conn->query("SELECT * FROM users WHERE email='$email'");
+
+    if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['username'] = $user['username']; // store username in session
+            header("Location: profile.php"); // redirect to profile page
+            exit();
+        } else {
+            $error = "Incorrect password!";
+        }
+    } else {
+        $error = "Email not registered!";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +45,8 @@
             <p>Log in or <a href="signup.html">sign up to join us</a></p>
         </header>
         
-        <form class="login-form">
+        <form action="login.php" method="POST" class="login-form">
+
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
@@ -26,6 +59,8 @@
                     <span class="show-hide-btn" onclick="togglePasswordVisibility()">Show</span>
                 </div>
             </div>
+            <?php if(isset($error)) { echo "<p style='color:red; margin-top:10px;'>$error</p>"; } ?>
+
 
             <button type="submit" class="log-in-button">Log In</button>
         </form>

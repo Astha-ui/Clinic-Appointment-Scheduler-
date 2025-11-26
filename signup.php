@@ -1,3 +1,34 @@
+<?php
+// Start session
+session_start();
+
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'clinic_db'); // replace 'clinic_db' with your DB name
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $conn->real_escape_string($_POST['email']);
+    $username = $conn->real_escape_string($_POST['username']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    // Check if email already exists
+    $check = $conn->query("SELECT * FROM users WHERE email='$email'");
+    if ($check->num_rows > 0) {
+        $error = "Email already registered!";
+    } else {
+        // Insert into database
+        $conn->query("INSERT INTO users (email, username, password) VALUES ('$email', '$username', '$password')");
+        $_SESSION['username'] = $username; // log in user
+        header("Location: profile.php"); // redirect to profile
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +44,8 @@
             <p>Create a free account or <a href="login.html">log in</a></p>
         </header>
         
-        <form class="signup-form">
+        <form class="signup-form" method="POST" action="">
+
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
@@ -31,6 +63,8 @@
                     <span class="show-hide-btn" onclick="togglePasswordVisibility()">Show</span>
                 </div>
             </div>
+            <?php if(isset($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
+
 
             <button type="submit" class="sign-up-button">Sign Up</button>
         </form>
