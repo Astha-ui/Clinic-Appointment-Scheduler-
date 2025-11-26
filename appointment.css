@@ -1,0 +1,135 @@
+
+/* BODY */
+
+
+/* MAIN CONTAINER */
+.container {
+    background: #ffffff;
+    width: 900px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 4px solid #dce4f7;
+    margin: 40px auto;
+}
+
+.title {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #0d1b3d;
+}
+
+/* APPOINTMENT LAYOUT */
+.appointment-box {
+    display: flex;
+    gap: 50px;
+}
+
+.left-section, .right-section {
+    flex: 1;
+}
+
+.section-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0d1b3d;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* CALENDAR */
+.calendar {
+    background: #f8faff;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #e2e7f3;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.nav-btn {
+    background: #eaf0ff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.calendar-grid span {
+    padding: 10px 0;
+    text-align: center;
+    background: white;
+    border: 1px solid #e2e7f3;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.calendar-grid span:hover {
+    background: #eaf0ff;
+}
+
+.selected-date {
+    background: #2d6cea !important;
+    color: white !important;
+}
+
+/* INPUT FIELDS (name, email, dropdown) */
+.email-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccd7ee;
+    margin-bottom: 20px;
+    background: white;
+    font-size: 14px;
+}
+
+/* TIME GRID */
+.time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.time-btn {
+    padding: 12px 0;
+    background: #eef2ff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.time-btn.selected {
+    background: #2d6cea;
+    color: white;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
+    display: block;
+    margin: 25px auto 0;
+    background: #2d6cea;
+    color: white;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* FOOTER */
+

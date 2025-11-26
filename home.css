@@ -2,7 +2,8 @@
 .logo-image {
     height: 40px;
     width: auto; 
-}*/
+}
+*/
 
 body {
     font-family: 'Arial', sans-serif;
@@ -14,56 +15,40 @@ body {
 }
 
 
-.navbar {
-    background-color: white;
-    padding: 20px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+/* --- NEW HERO SECTION STYLES --- */
+.hero-section {
+    /* Set your uploaded image as the background for the entire section */
+    background-image: url('image_75e519.jpg'); 
+    background-size: cover;
+    background-position: center top; 
+    background-repeat: no-repeat;
+    /* Give it a good height for the banner effect */
+    min-height: 600px;
+    /* Add a slight gradient overlay to help the text stand out */
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+        url('mainsection.jpg'); 
+    
+    /* Center the content vertically within the hero section (optional) */
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
 }
+/* --- END NEW HERO SECTION STYLES --- */
 
-.logo {
-    color: #2c3e50;
-    font-size: 1.8rem;
-    font-weight: bold;
-    font-family: 'Georgia', serif;
-}
 
-.nav-links {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 30px;
-}
-
-.nav-links a {
-    color: #555;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #3498db;
-}
-
-/* Main Content Styles */
+/* Main Content Styles - MODIFIED */
 .main-container {
     max-width: 800px;
-    margin: 50px auto;
+    /* Adjust margin to center it neatly within the hero-section */
+    /* Removed 'margin: 50px auto;' because flexbox in .hero-section handles centering */
     padding: 30px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.689); /* Ensures the card is white */
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0,);
+    
+    /* Remove the old background image properties that were here */
 }
 
 /* Header Styles */
