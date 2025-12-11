@@ -1,32 +1,48 @@
 <?php
+include 'navbar.php';
+?>
+<?php
+// ======== ENABLE ERROR REPORTING ========
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $success = "";
 $error = "";
 
+// ======== CONNECT TO DATABASE ========
+$conn = new mysqli("localhost", "root", "", "clinic_db"); 
+// Change 'clinic_db' to your database name
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// ======== HANDLE FORM SUBMISSION ========
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Sanitize input
-    $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['email']);
-    $phone = htmlspecialchars($_POST['phone']);
-    $message = htmlspecialchars($_POST['message']);
+    // Get and sanitize input
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $message = trim($_POST['message']);
 
-    // Your email where messages will be sent
-    $to = "your-email@example.com"; // <-- Replace with your email
-    $subject = "New Contact Form Submission from $name";
-
-    $body = "Name: $name\n";
-    $body .= "Email: $email\n";
-    $body .= "Phone: $phone\n";
-    $body .= "Message:\n$message\n";
-
-    $headers = "From: $email";
-
-    // Send email
-    if (mail($to, $subject, $body, $headers)) {
-        $success = "Thank you! Your message has been sent successfully.";
+    // ======== INSERT DATA USING PREPARED STATEMENT ========
+    $stmt = $conn->prepare("INSERT INTO contact_messages (name, email, phone, message) VALUES (?, ?, ?, ?)");
+    if (!$stmt) {
+        $error = "Prepare failed: (" . $conn->errno . ") " . $conn->error;
     } else {
-        $error = "Oops! Something went wrong, please try again.";
+        $stmt->bind_param("ssss", $name, $email, $phone, $message);
+
+        if ($stmt->execute()) {
+            $success = "Thank you! Your message has been sent successfully.";
+        } else {
+            $error = "Error inserting data: " . $stmt->error;
+        }
+        $stmt->close();
     }
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -41,19 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <nav class="navbar">
-    <div class="nav-container">
-        <ul class="nav-links">
-            <li><a href="home.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="service.html">Services</a></li>
-            <li><a href="contact.php">Contact</a></li>
-        </ul>
-        <div class="auth-buttons">
-            <a href="login.html" class="nav-btn login-btn">Log In</a>
-            <a href="signup.html" class="nav-btn signup-btn">Sign Up</a>
-        </div>
-    </div>
-</nav>
+   
 
 <div class="container">
     <header>
@@ -136,9 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h4>Quick Links</h4>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="service.html">Services</a></li>
-                    <li><a href="appointment.html">Book Appointment</a></li>
+                    <li><a href="about.php">About Us</a></li>
+                    <li><a href="service.php">Services</a></li>
+                    <li><a href="appointment.php">Book Appointment</a></li>
                 </ul>
             </div>
 

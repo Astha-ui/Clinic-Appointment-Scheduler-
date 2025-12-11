@@ -1,4 +1,7 @@
 <?php
+include 'navbar.php';
+?>
+<?php
 // Start session
 session_start();
 
@@ -77,20 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-<nav class="navbar">
-    <div class="nav-container">
-        <ul class="nav-links">
-            <li><a href="home.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="service.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <div class="auth-buttons">
-            <a href="login.html" class="nav-btn login-btn">Log In</a>
-            <a href="signup.html" class="nav-btn signup-btn">Sign Up</a>
-        </div>
-    </div>
-</nav>
+
 
 <div class="container">
     <h1 class="title">Make an Appointment</h1>

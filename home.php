@@ -1,3 +1,6 @@
+<?php
+include 'navbar.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,22 +15,7 @@
 </head>
 
 <body>
-    <nav class="navbar">
-    <div class="nav-container">
-        <ul class="nav-links">
-            <li><a href="home.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="service.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-
-        <div class="auth-buttons">
-            <a href="login.html" class="nav-btn login-btn">Log In</a>
-            <a href="signup.html" class="nav-btn signup-btn">Sign Up</a>
-        </div>
-    </div>
-</nav>
-
+   
     <div class="hero-section">
         <div class="main-container">
             <header>
@@ -44,8 +32,8 @@
                 <div class="divider"></div>
 
                 <div class="buttons">
-                    <a href="appointment.html" class="button primary">Get Started</a>
-                    <a href="about.html" class="button secondary">Learn More</a>
+                    <a href="appointment.php" class="button primary">Get Started</a>
+                    <a href="about.php" class="button secondary">Learn More</a>
                 </div>
             </main>
         </div>
@@ -81,7 +69,7 @@
                 <h2>Ready to Start Your Journey?</h2>
                 <p class="cta-text">Take the first step towards better mental health. Sign in to book your appointment
                     with one of our licensed therapists.</p>
-                <a href="appointment.html" class="cta-button">Sign in to Book Appointment</a>
+                <a href="appointment.php" class="cta-button">Sign in to Book Appointment</a>
                 <div class="divider"></div>
             </div>
         </div>
@@ -99,9 +87,9 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="service.html">Services</a></li>
-                        <li><a href="appointment.html">Book Appointment</a></li>
+                        <li><a href="about.php">About Us</a></li>
+                        <li><a href="service.php">Services</a></li>
+                        <li><a href="appointment.php">Book Appointment</a></li>
                     </ul>
                 </div>
 

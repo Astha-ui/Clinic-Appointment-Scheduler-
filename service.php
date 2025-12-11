@@ -1,3 +1,6 @@
+<?php
+include 'navbar.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,21 +15,7 @@
 </head>
 
 <body>
-     <nav class="navbar">
-    <div class="nav-container">
-        <ul class="nav-links">
-            <li><a href="home.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="service.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-
-        <div class="auth-buttons">
-            <a href="login.html" class="nav-btn login-btn">Log In</a>
-            <a href="signup.html" class="nav-btn signup-btn">Sign Up</a>
-        </div>
-    </div>
-</nav>
+     
 
     <!-- First Services Grid -->
     <div class="basic-services">
@@ -138,9 +127,9 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="service.html">Services</a></li>
-                        <li><a href="appointment.html">Book Appointment</a></li>
+                        <li><a href="about.php">About Us</a></li>
+                        <li><a href="service.php">Services</a></li>
+                        <li><a href="appointment.php">Book Appointment</a></li>
                     </ul>
                 </div>
 

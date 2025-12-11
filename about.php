@@ -1,3 +1,6 @@
+<?php
+include 'navbar.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,31 +14,7 @@
 </head>
 
 <body>
-    <?php session_start(); ?>
-<nav class="navbar">
-    <div class="nav-container">
-        <ul class="nav-links">
-            <li><a href="home.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="service.html">Services</a></li>
-            <li><a href="contact.php">Contact</a></li>
-        </ul>
-
-        <div class="auth-buttons">
-            <?php if(isset($_SESSION['username'])): ?>
-                <!-- Profile Icon -->
-                <a href="profile.php" class="nav-btn profile-icon" title="Go to Profile">
-                    <img src="images/profile-icon.png" alt="Profile" />
-                </a>
-            <?php else: ?>
-                <!-- Show login/signup buttons -->
-                <a href="login.php" class="nav-btn login-btn">Log In</a>
-                <a href="signup.php" class="nav-btn signup-btn">Sign Up</a>
-            <?php endif; ?>
-        </div>
-    </div>
-</nav>
-
+   
   <section class="about-section">
     <div class="about-content">
       <h2>About Serenity Therapy Clinic</h2>
@@ -140,8 +119,8 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="service.html">Services</a></li>
+                        <li><a href="about.php">About Us</a></li>
+                        <li><a href="service.php">Services</a></li>
                         <li><a href="appointment.php">Book Appointment</a></li>
                     </ul>
                 </div>
