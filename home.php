@@ -7,7 +7,7 @@ include 'navbar.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicare Clinic</title>
+    <title>Serenity Therapy Clinic</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="footer.css">

@@ -1,29 +1,36 @@
 <?php
-include 'navbar.php';
-?>
-<?php
-// Start session
 session_start();
+include 'navbar.php';
+
+// Redirect if user not logged in
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
 
 // Database connection
-$conn = new mysqli('localhost', 'root', '', 'clinic_db'); // Use your DB name
-
+$conn = new mysqli('localhost', 'root', '', 'clinic_db');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $conn->real_escape_string($_POST['name']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $treatment = $conn->real_escape_string($_POST['treatment']);
-    $date = $conn->real_escape_string($_POST['date']);
-    $time = $conn->real_escape_string($_POST['time']);
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $treatment = $_POST['treatment'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
 
-    if(empty($name) || empty($email) || empty($treatment) || empty($date) || empty($time)) {
+    // Validation
+    if (empty($name) || empty($email) || empty($treatment) || empty($date) || empty($time)) {
         $error = "All fields are required!";
+    } elseif (!preg_match("/^[a-zA-Z ]+$/", $name)) {
+        $error = "Name can contain only letters and spaces!";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format!";
     } else {
-        // Insert appointment into database
+        // Escape data
         $stmt = $conn->prepare("INSERT INTO appointments (name, email, treatment, date, time) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $name, $email, $treatment, $date, $time);
 
@@ -46,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="stylesheet" href="navbar.css">
 <link rel="stylesheet" href="footer.css">
 <style>
-/* Add only necessary form adjustments */
 .submit-btn {
     background-color: #38a186;
     color: white;
@@ -57,31 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     cursor: pointer;
     margin-top: 20px;
 }
-.submit-btn:hover {
-    background-color: #2f836d;
-}
-.selected-date {
-    background-color: #38a186;
-    color: white;
-    border-radius: 50%;
-}
-.time-btn.selected {
-    background-color: #38a186;
-    color: white;
-}
-.time-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-#successMsg {
-    font-weight: bold;
-}
+.submit-btn:hover { background-color: #2f836d; }
+.selected-date { background-color: #38a186; color: white; border-radius: 50%; }
+.time-btn.selected { background-color: #38a186; color: white; }
+.time-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+#successMsg { font-weight: bold; }
 </style>
 </head>
 
 <body>
-
-
 <div class="container">
     <h1 class="title">Make an Appointment</h1>
 
@@ -101,15 +91,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- RIGHT SECTION -->
         <div class="right-section">
-            <form id="appointmentForm" method="POST">
+            <form id="appointmentForm" method="POST" onsubmit="return validateForm()">
                 <label class="section-label">Enter your name</label>
-                <input type="text" placeholder="Your full name" class="email-input" id="name" name="name" />
+                <input type="text" placeholder="Your full name" class="email-input" id="name" name="name" value="<?php echo $_SESSION['username']; ?>" readonly />
 
                 <label class="section-label">Enter your email</label>
-                <input type="email" placeholder="example@mail.com" class="email-input" id="email" name="email" />
+                <input type="email" placeholder="example@mail.com" class="email-input" id="email" name="email" value="<?php echo $_SESSION['email']; ?>" readonly />
 
                 <label class="section-label">Select Treatment</label>
-                <select class="email-input" id="treatment" name="treatment">
+                <select class="email-input" id="treatment" name="treatment" required>
                     <option value="">-- Select Treatment --</option>
                     <option>Cognitive Behavioral Therapy</option>
                     <option>Stress Management</option>
@@ -134,13 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button type="button" class="time-btn">05:00 pm</button>
                 </div>
 
-                <!-- Hidden inputs for date and time -->
-                <input type="hidden" name="date" id="selectedDate">
-                <input type="hidden" name="time" id="selectedTime">
+                <input type="hidden" name="date" id="selectedDate" required>
+                <input type="hidden" name="time" id="selectedTime" required>
 
                 <button type="submit" class="submit-btn">Get Appointment</button>
 
-                <!-- Messages from PHP -->
                 <?php
                 if(isset($success)) echo "<p style='color:green;margin-top:10px;'>$success</p>";
                 if(isset($error)) echo "<p style='color:red;margin-top:10px;'>$error</p>";
@@ -186,10 +174,8 @@ function selectDate(day) {
     document.querySelectorAll(".calendar-grid span").forEach(s => s.classList.remove("selected-date"));
     [...calendarGrid.children].find(s => s.textContent == day).classList.add("selected-date");
 
-    // Set hidden input for PHP
     document.getElementById('selectedDate').value = clicked.toISOString().split('T')[0];
 
-    // Disable past times if today
     const timeButtons = document.querySelectorAll(".time-btn");
     if (clicked.toDateString() === today.toDateString()) {
         const currentHour = today.getHours();
@@ -206,7 +192,6 @@ function selectDate(day) {
 document.getElementById("prevMonth").onclick = () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); };
 document.getElementById("nextMonth").onclick = () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); };
 
-// Time selection
 document.querySelectorAll(".time-btn").forEach(btn => {
     btn.onclick = () => {
         if (btn.disabled) return;
@@ -215,6 +200,18 @@ document.querySelectorAll(".time-btn").forEach(btn => {
         btn.classList.add("selected");
     };
 });
+
+function validateForm() {
+    const date = document.getElementById('selectedDate').value;
+    const time = document.getElementById('selectedTime').value;
+    const treatment = document.getElementById('treatment').value;
+
+    if (!date) { alert("Please select a date!"); return false; }
+    if (!time) { alert("Please select a time!"); return false; }
+    if (!treatment) { alert("Please select a treatment!"); return false; }
+
+    return true;
+}
 
 renderCalendar();
 </script>

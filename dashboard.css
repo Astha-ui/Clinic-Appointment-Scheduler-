@@ -1,0 +1,90 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container {
+  max-width: 1102px;
+  margin: 80px auto 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dashboard-container h2 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table th {
+  background: #38a186;
+  color: #fff;
+}
+
+table tr:nth-child(even) {
+  background: #f2f2f2;
+}
+
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-top: 20px;
+  margin-right: 5px;
+  background: #38a186;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  border: none;
+}
+
+.btn:hover {
+  background: #2f836d;
+}
+
+.no-appointments {
+  padding: 15px 0;
+  font-style: italic;
+  color: #888;
+}
+
+.edit-form input,
+.edit-form select {
+  padding: 5px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+}
+
+.edit-success {
+  color: green;
+  font-weight: bold;
+}
+.del {
+  background-color: red;
+}
+
+.del:hover {
+  background-color: darkred;
+}

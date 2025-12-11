@@ -1,0 +1,143 @@
+/* Reset & body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header / Navbar */
+.header {
+  width: 100%;
+  background-color: #38a186;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header .logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.header nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.header nav a:hover {
+  color: #e0f2f1;
+}
+
+/* Login container */
+.login-container {
+  background-color: white;
+  width: 100%;
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Header inside container */
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h1 {
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.login-header p {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Form styles */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #38a186;
+  box-shadow: 0 0 0 1px #38a186;
+}
+
+/* Password toggle */
+.password-input-wrapper {
+  position: relative;
+}
+
+.show-hide-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #38a186;
+  cursor: pointer;
+}
+
+/* Submit button */
+.log-in-button {
+  background-color: #38a186;
+  color: white;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.log-in-button:hover {
+  background-color: #2f836d;
+}
+
+/* Error message */
+.error-msg {
+  color: red;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-container {
+    margin: 40px 20px;
+    padding: 30px;
+  }
+}

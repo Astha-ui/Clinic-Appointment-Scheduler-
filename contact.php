@@ -1,7 +1,7 @@
 <?php
+session_start();
 include 'navbar.php';
-?>
-<?php
+
 // ======== ENABLE ERROR REPORTING ========
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -11,35 +11,51 @@ $success = "";
 $error = "";
 
 // ======== CONNECT TO DATABASE ========
-$conn = new mysqli("localhost", "root", "", "clinic_db"); 
-// Change 'clinic_db' to your database name
-
+$conn = new mysqli("localhost", "root", "", "clinic_db");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 // ======== HANDLE FORM SUBMISSION ========
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get and sanitize input
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $phone = trim($_POST['phone']);
-    $message = trim($_POST['message']);
 
-    // ======== INSERT DATA USING PREPARED STATEMENT ========
-    $stmt = $conn->prepare("INSERT INTO contact_messages (name, email, phone, message) VALUES (?, ?, ?, ?)");
-    if (!$stmt) {
-        $error = "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+    // Optionally, force only logged-in users to submit
+    if (!isset($_SESSION['username'])) {
+        $error = "You must be logged in to send a message.";
     } else {
-        $stmt->bind_param("ssss", $name, $email, $phone, $message);
 
-        if ($stmt->execute()) {
-            $success = "Thank you! Your message has been sent successfully.";
+        // Get and sanitize input
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $phone = trim($_POST['phone']);
+        $message = trim($_POST['message']);
+
+        // ======== VALIDATION ========
+        if (empty($name) || empty($email) || empty($message)) {
+            $error = "Name, email, and message are required!";
+        } elseif (!preg_match("/^[a-zA-Z ]+$/", $name)) {
+            $error = "Name can contain only letters and spaces!";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Invalid email format!";
+        } elseif (!empty($phone) && !preg_match("/^[0-9+\-\s]+$/", $phone)) {
+            $error = "Phone number can only contain numbers, spaces, +, and -!";
         } else {
-            $error = "Error inserting data: " . $stmt->error;
+            // ======== INSERT DATA USING PREPARED STATEMENT ========
+            $stmt = $conn->prepare("INSERT INTO contact_messages (name, email, phone, message) VALUES (?, ?, ?, ?)");
+            if (!$stmt) {
+                $error = "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+            } else {
+                $stmt->bind_param("ssss", $name, $email, $phone, $message);
+                if ($stmt->execute()) {
+                    $success = "Thank you! Your message has been sent successfully.";
+                } else {
+                    $error = "Error inserting data: " . $stmt->error;
+                }
+                $stmt->close();
+            }
         }
-        $stmt->close();
-    }
+    // }
+}
 }
 
 $conn->close();
@@ -48,30 +64,24 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicare Clinic | Contact</title>
-    <link rel="stylesheet" href="contact.css">
-    <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="footer.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medicare Clinic | Contact</title>
+<link rel="stylesheet" href="contact.css">
+<link rel="stylesheet" href="navbar.css">
+<link rel="stylesheet" href="footer.css">
 </head>
 <body>
-<nav class="navbar">
-   
 
-<div class="container">
+<div class="contact-container">
     <header>
         <h1>Contact Us</h1>
         <p class="intro-text">Have questions? We're here to help. Reach out to us and we'll get back to you as soon as possible.</p>
     </header>
 
     <?php
-    if ($success) {
-        echo "<p style='color:green;font-weight:bold;margin-bottom:10px;'>$success</p>";
-    }
-    if ($error) {
-        echo "<p style='color:red;font-weight:bold;margin-bottom:10px;'>$error</p>";
-    }
+    if ($success) echo "<p style='color:green;font-weight:bold;margin-bottom:10px;'>$success</p>";
+    if ($error) echo "<p style='color:red;font-weight:bold;margin-bottom:10px;'>$error</p>";
     ?>
 
     <main>
@@ -100,7 +110,7 @@ $conn->close();
         <hr>
 
         <section class="contact-form">
-            <form action="contact.php" method="POST">
+            <form action="contact.php" method="POST" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="name">Name *</label>
                     <input type="text" id="name" name="name" placeholder="Your full name" required>
@@ -139,10 +149,9 @@ $conn->close();
             <div class="footer-links">
                 <h4>Quick Links</h4>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="about.php">About Us</a></li>
-                    <li><a href="service.php">Services</a></li>
+                    <li><a href="home.php">Home</a></li>
                     <li><a href="appointment.php">Book Appointment</a></li>
+                    <li><a href="contact.php">Contact</a></li>
                 </ul>
             </div>
 
@@ -158,12 +167,36 @@ $conn->close();
 
         <div class="footer-bottom">
             <p>© 2024 Serenity Therapy Clinic. All rights reserved.</p>
-            <div class="legal-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-            </div>
         </div>
     </div>
 </footer>
+
+<script>
+function validateForm() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!name || !email || !message) {
+        alert("Name, email, and message are required!");
+        return false;
+    }
+    if (!/^[a-zA-Z ]+$/.test(name)) {
+        alert("Name can contain only letters and spaces!");
+        return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("Invalid email format!");
+        return false;
+    }
+    if (phone && !/^[0-9+\-\s]+$/.test(phone)) {
+        alert("Phone number can contain only numbers, spaces, +, and -");
+        return false;
+    }
+    return true;
+}
+</script>
+
 </body>
 </html>
