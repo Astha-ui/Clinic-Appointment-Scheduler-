@@ -21,12 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($password) < 6) {
         $error = "Password must be at least 6 characters long!";
     } else {
-        // Escape email and username for SQL
         $email = $conn->real_escape_string($email);
         $username = $conn->real_escape_string($username);
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-        // Check if email exists
+        // Check if user exists
         $check = $conn->query("SELECT * FROM users WHERE email='$email'");
         if ($check->num_rows > 0) {
             $error = "Email already registered!";
@@ -49,40 +48,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="signup.css">
 </head>
 <body>
+
     <?php include 'navbar.php'; ?>
 
-    <div class="signup-container">
-        <div class="signup-header">
-            <h1>Sign Up</h1>
-            <p>Create your account below.</p>
+    <!-- ADDED WRAPPER FOR CENTERING -->
+    <div class="page-wrapper">
+
+        <div class="signup-container">
+            <div class="signup-header">
+                <h1>Sign Up</h1>
+                <p>Create your account below.</p>
+            </div>
+
+            <form class="signup-form" method="POST" action="signup.php" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" name="password" id="password" required>
+                        <span class="show-hide-btn" onclick="togglePassword()">Show</span>
+                    </div>
+                </div>
+
+                <?php if(isset($error)) echo "<p class='error-msg'>$error</p>"; ?>
+
+                <button class="sign-up-button" type="submit">Sign Up</button>
+            </form>
+
+            <p class="login-text">
+                Already have an account? <a href="login.php">Log in</a><br/>
+                <a href="admin_login.php">admin</a>
+            </p>
         </div>
 
-        <form class="signup-form" method="POST" action="signup.php" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" id="email" required>
-            </div>
-
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" id="username" required>
-            </div>
-
-            <div class="form-group">
-                <label>Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" name="password" id="password" required>
-                    <span class="show-hide-btn" onclick="togglePassword()">Show</span>
-                </div>
-            </div>
-
-            <?php if(isset($error)) echo "<p class='error-msg'>$error</p>"; ?>
-
-            <button class="sign-up-button" type="submit">Sign Up</button>
-        </form>
-
-        <p class="login-text">Already have an account? <a href="login.php">Log in</a><br/><a href="admin_login.php"> admin</br></p>
-    </div>
+    </div> <!-- END page-wrapper -->
 
 <script>
 function togglePassword() {
@@ -97,7 +105,6 @@ function togglePassword() {
     }
 }
 
-// Client-side validation
 function validateForm() {
     const email = document.getElementById('email').value.trim();
     const username = document.getElementById('username').value.trim();
@@ -123,5 +130,6 @@ function validateForm() {
     return true;
 }
 </script>
+
 </body>
 </html>

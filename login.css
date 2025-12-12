@@ -133,3 +133,8 @@ body {
     margin: 20px;
   }
 }
+/* Fix navbar overlapping the login box */
+.page-wrapper {
+  margin-top: 80px;  /* Adjust this value as needed */
+}
+
